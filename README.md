@@ -8,7 +8,7 @@ A starting point for Playwright + TypeScript test automation projects. Clone or 
 
 ## At a Glance
 
-|                     |                                                                                                                                                                                       |
+| Aspect Details      | Description                                                                                                                                                                           |
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Browsers**        | Chromium enabled by default; Firefox/WebKit projects included but commented out                                                                                                       |
 | **CI**              | 3 workflows — sanity check (lint/typecheck/`@smoke`) on every push, full suite + published report on push to `main`, PR auto-description bot                                          |
