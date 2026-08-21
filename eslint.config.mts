@@ -1,5 +1,6 @@
 import tseslint from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
+import importPlugin from 'eslint-plugin-import-x';
 import prettierPlugin from 'eslint-plugin-prettier';
 import playwright from 'eslint-plugin-playwright';
 import stylistic from '@stylistic/eslint-plugin';
@@ -52,9 +53,19 @@ const config = [
         },
         plugins: {
             '@typescript-eslint': tseslint,
+            'import-x': importPlugin,
             prettier: prettierPlugin,
             playwright,
             '@stylistic': stylistic,
+        },
+        settings: {
+            // Tells ESLint to read path aliases from tsconfig.json
+            'import-x/resolver': {
+                typescript: {
+                    alwaysTryTypes: true,
+                    project: './tsconfig.json',
+                },
+            },
         },
         rules: {
             ...tsRecommendedRules,
@@ -65,6 +76,42 @@ const config = [
                 'error',
                 'declaration',
                 { allowArrowFunctions: false },
+            ],
+
+            'import-x/order': [
+                'error',
+                {
+                    groups: [
+                        'builtin',
+                        'external', // Block 1: Frameworks, @playwright/test, & App Fixtures
+                        'internal', // Block 2: App Modules (enums, pages, utils)
+                        ['parent', 'sibling', 'index'],
+                        'object',
+                        'type',
+                    ],
+
+                    pathGroups: [
+                        {
+                            // Group fixture imports inside the 'external' block, after real third-party packages
+                            pattern: '@fixtures/**',
+                            group: 'external',
+                            position: 'after',
+                        },
+                        {
+                            // Keep static JSON data at the bottom
+                            pattern: '**/*.json',
+                            group: 'index',
+                            position: 'after',
+                        },
+                    ],
+
+                    pathGroupsExcludedImportTypes: [],
+                    'newlines-between': 'always',
+                    alphabetize: {
+                        order: 'asc',
+                        caseInsensitive: true,
+                    },
+                },
             ],
 
             // Enforces newline at the end of files
@@ -87,6 +134,15 @@ const config = [
             // General JavaScript rules
             'no-console': 'error',
             'prefer-const': 'error',
+            'no-restricted-syntax': [
+                'error',
+                {
+                    selector:
+                        'CallExpression[callee.name="expect"] > AwaitExpression.arguments',
+                    message:
+                        'Do not await inside expect(); use await expect(x).resolves.toBe(y) instead.',
+                },
+            ],
 
             // Playwright-specific rules - Constitution enforcement
             'playwright/missing-playwright-await': 'error',

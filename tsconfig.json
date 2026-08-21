@@ -1,5 +1,13 @@
 {
     "compilerOptions": {
+        "paths": {
+            "@fixtures/*": ["./src/fixtures/*"],
+            "@enums/*": ["./src/enums/*"],
+            "@test-data/*": ["./src/test-data/*"],
+            "@utils/*": ["./src/utils/*"],
+            "@pages/*": ["./src/pages/*"],
+            "@app-types/*": ["./src/types/*"]
+        },
         "target": "ESNext",
         "module": "NodeNext",
         "lib": ["ESNext", "DOM"],

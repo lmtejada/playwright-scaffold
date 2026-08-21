@@ -1,6 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 import dotenv from 'dotenv';
-import { StorageStatePaths } from './src/enums/app';
+
+import { StorageStatePaths } from '@enums/app';
 
 /**
  * Load environment variables from .env file.
